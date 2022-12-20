@@ -1,47 +1,104 @@
-import numpy as np
+
 class DB:
+    global m
+    m = [["banu", "b+", "erode", 7373], ["deeksha", "a+", "erode", 7374], ["karthi", "b+", "erode", 7375],
+         ["sarvanan", "o+", "erode", 7376]]
+    #m=[]
+    def create(self):
+        global name, bg, location, no, k, m
+        k = int(input("Enter the no of donor's need to be added:"))
 
-    """
-    import numpy as np
+        for i in range(k):
+            a = []
+            name = input("Enter your name:")
+            bg = input("enter the blood group:")
+            location = input("enter the location: ")
+            no = int(input("Enter the Ph.no:"))
 
-R = int(input("Enter the number of rows:"))
-C = int(input("Enter the number of columns:"))
+            a.append(name)
+            a.append(bg)
+            a.append(location)
+            a.append(no)
+            print("Recorded updated succesfully")
+            m.append(a)
+            for i in m:
+                print(i, end=" \n")
+            print("====================================================")
 
-print("Enter the entries in a single line (separated by space): ")
-
-# User input of entries in a
-# single line separated by space
-entries = list(map(int, input().split()))
-
-# For printing the matrix
-matrix = np.array(entries).reshape(R,C)
-print(matrix)"""
-    def create(self,lst2):
-        global name,bg,location,no,R,C
-        R = 4
-        C = int(input("Enter the number of columns:"))
-
-        name=input("Enter your name:")
-        bg=input("enter the blood group")
-        location=input("enter the location ")
-        no=int(input("Enter the Ph.no"))
-
-        entries = list(map(int, input().split("\n")))
-        matrix = np.array(entries).reshape(R, C)
-        lst =[name,bg,location,no]
-
-        lst2.extend(lst)
-        #lst.append(name,bg,location,no)
-        print(lst2)
-        return("Add Operation")
     #def create(self,name,bg,location,no):
     def update(self):
-        return ("update Operation")
+        ch = int(input("Enter the choice \n 1. For change name \n2. for change blood group \n3. for change location \n4. change no \nEnter your choice:"))
+
+        if ch == 1:
+            name = input("Enter the name:")
+            for i in range(len(m)):
+
+                if m[i][0] == name:
+                    x = input("Enter the new name:")
+                    m[i][0] = x
+                    print(m[i])
+                    print("=====Details Updated=====")
+
+        if ch == 2:
+            name = input("Enter the name:")
+            for i in range(len(m)):
+
+                if m[i][0] == name:
+                    x = input("Enter the new blood group:")
+                    m[i][1] = x
+                    print(m[i])
+                    print("=====Details Updated=====")
+
+        if ch == 3:
+            name = input("Enter the name:")
+            for i in range(len(m)):
+
+                if m[i][0] == name:
+                    x = input("Enter the new address:")
+                    m[i][2] = x
+                    print(m[i])
+                    print("=====Details Updated=====")
+
+        if ch == 4:
+            name = input("Enter the name:")
+            for i in range(len(m)):
+
+                if m[i][0] == name:
+                    x = input("Enter the no:")
+                    m[i][3] = x
+                    print(m[i])
+                    print("=====Details Updated=====")
+        else:
+            print("Invalid selection")
+
+
 
     def search(self):
-        return("result ")
+        #print(m)
+
+        blood_type = input("Enter the blood group:")
+
+        for i in range(len(m)):
+           # print(m[i][1])
+            if m[i][1] == blood_type:
+                print(m[i])
+        print("====================================================")
+
+
+    def all_donor(self):
+        print("======Total Donar======")
+        for i in m:
+            print(i, end=" \n")
 
     def delete(self):
+        name = input("\nEnter the name:")
+        for i in range(len(m)):
+
+            if m[i][0] == name:
+                del m[i]
+                for i in m:
+                    print(i, end=" \n")
+
         return("delete Operation")
 
 
@@ -58,6 +115,8 @@ class user(DB):
         password1 = input("\n\tEnter the password :")
         if name1==name or password1  == password:
             print("\n\t signin succesfully")
+
+
     def log_out(self):
         return("Log Out")
     def user_details(self):
