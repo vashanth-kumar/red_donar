@@ -1,19 +1,15 @@
-
+import pandas as pd
+import csv
 class DB:
-    global m
-    m = [["banu", "b+", "erode", 7373], ["deeksha", "a+", "erode", 7374], ["karthi", "b+", "erode", 7375],
-         ["sarvanan", "o+", "erode", 7376]]
-    #m=[]
-    def create(self):
-        global name, bg, location, no, k, m
-        k = int(input("Enter the no of donor's need to be added:"))
+    global m,indx
+    m = []
 
-        for i in range(k):
+    def create(self,name,bg,location,no):
+        #global name, bg, location, no, k, m
+        #k = int(input("Enter the no of donor's need to be added:"))
+        #for i in range(k):
             a = []
-            name = input("Enter your name:")
-            bg = input("enter the blood group:")
-            location = input("enter the location: ")
-            no = int(input("Enter the Ph.no:"))
+
 
             a.append(name)
             a.append(bg)
@@ -21,83 +17,70 @@ class DB:
             a.append(no)
             print("Recorded updated succesfully")
             m.append(a)
-            for i in m:
-                print(i, end=" \n")
+            with open("new_file.csv", "a+") as my_csv:
+                csvWriter = csv.writer(my_csv, delimiter=',')
+                csvWriter.writerows(m)
             print("====================================================")
 
     #def create(self,name,bg,location,no):
-    def update(self):
-        ch = int(input("Enter the choice \n 1. For change name \n2. for change blood group \n3. for change location \n4. change no \nEnter your choice:"))
-
-        if ch == 1:
-            name = input("Enter the name:")
-            for i in range(len(m)):
-
-                if m[i][0] == name:
-                    x = input("Enter the new name:")
-                    m[i][0] = x
-                    print(m[i])
-                    print("=====Details Updated=====")
-
-        if ch == 2:
-            name = input("Enter the name:")
-            for i in range(len(m)):
-
-                if m[i][0] == name:
-                    x = input("Enter the new blood group:")
-                    m[i][1] = x
-                    print(m[i])
-                    print("=====Details Updated=====")
-
-        if ch == 3:
-            name = input("Enter the name:")
-            for i in range(len(m)):
-
-                if m[i][0] == name:
-                    x = input("Enter the new address:")
-                    m[i][2] = x
-                    print(m[i])
-                    print("=====Details Updated=====")
-
-        if ch == 4:
-            name = input("Enter the name:")
-            for i in range(len(m)):
-
-                if m[i][0] == name:
-                    x = input("Enter the no:")
-                    m[i][3] = x
-                    print(m[i])
-                    print("=====Details Updated=====")
-        else:
-            print("Invalid selection")
+    #def update(self,ch,old,new):
 
 
 
-    def search(self):
+
+
+
+    def search(self,blood_type,loc):
         #print(m)
 
-        blood_type = input("Enter the blood group:")
+        file = open('new_file.csv', mode='r')
+        csfile = csv.reader(file)
+        a = []
+        for i in csfile:
+            # print(m[i][1])
+            if blood_type == i[1] and loc==i[2]:
+                a.append(i)
+        file.close()
+        return a
 
-        for i in range(len(m)):
-           # print(m[i][1])
-            if m[i][1] == blood_type:
-                print(m[i])
-        print("====================================================")
 
 
     def all_donor(self):
+
         print("======Total Donar======")
-        for i in m:
-            print(i, end=" \n")
+        # blood_type = input("Enter the blood group:")
+        file = open('new_file.csv', mode='r')
+        csfile = csv.reader(file)
+        for i in csfile:
+            return i
+            #print(i)
+
+        #print("====================================================")
+
+
 
     def delete(self):
-        name = input("\nEnter the name:")
-        for i in range(len(m)):
+        no = input("\nEnter the name:")
 
-            if m[i][0] == name:
-                del m[i]
-                for i in m:
-                    print(i, end=" \n")
+        file = open('new_file.csv', mode='r')
+        csfile = csv.reader(file)
+        a = []
+        for i in csfile:
+            # print(m[i][1])
+            if no == i[1]:
+                a.append(i)
+                del i
+        file.close()
+
+        print(a)
+        print("====================================================")
+        #
+        # for i in range(len(m)):
+        #
+        #     if m[i][0] == name:
+        #         del m[i]
+        #         for i in m:
+        #             print(i, end=" \n")
 
         return("delete Operation")
 
@@ -122,7 +105,7 @@ class user(DB):
     def user_details(self):
         return('succesfully submitted')
 
-class admin(user):
+class admin(DB):
     def send(self):
         return "Alert sended"
    
@@ -139,5 +122,88 @@ class admin(user):
         obj_DB.log_out()
 
         return("bd values")
+
+
+
+
+
+
+class update:
+    def update_name(self,old,new):
+            file = open('new_file.csv', mode='r')
+            lst = list(csv.reader(file))
+            for i in lst:
+                if i[0] == old:
+                    indx = lst.index(i) - 1
+
+
+
+
+            df = pd.read_csv("new_file.csv")
+            df.loc[indx, 'Name'] = new
+            df.to_csv("new_file.csv", index=False)
+            log = pd.read_csv("new_file.csv")
+            log.loc[indx, "Name"] = new
+            log.to_csv("new_file.csv", index=False)
+            return ("update Succesfulluy!")
+
+    def update_bloodgroup(self,old,new):
+
+        file = open('new_file.csv', mode='r')
+        lst = list(csv.reader(file))
+
+
+        for i in lst:
+            if i[0] == old:
+                indx = lst.index(i) - 1
+
+
+        df = pd.read_csv("new_file.csv")
+        df.loc[indx, 'blood_grp'] = new
+        df.to_csv("new_file.csv", index=False)
+        log = pd.read_csv("new_file.csv")
+        log.loc[indx, "blood_grp"] = new
+        log.to_csv("new_file.csv", index=False)
+        print("=====Details Updated=====")
+
+    def update_location(self, old, new):
+            file = open('new_file.csv', mode='r')
+            lst = list(csv.reader(file))
+
+
+            for i in lst:
+                if i[0] == old:
+
+                    indx = lst.index(i) - 1
+
+
+
+            df = pd.read_csv("new_file.csv")
+            df.loc[indx, 'location'] = new
+            df.to_csv("new_file.csv", index=False)
+            log = pd.read_csv("new_file.csv")
+            log.loc[indx, "location"] = new
+            log.to_csv("new_file.csv", index=False)
+
+    def update_no(self, old, new):
+            file = open('new_file.csv', mode='r')
+            lst = list(csv.reader(file))
+
+
+            for i in lst:
+                if i[0] == old:
+
+                    indx = lst.index(i) - 1
+
+
+            df = pd.read_csv("new_file.csv")
+            df.loc[indx, 'no'] = new
+            df.to_csv("new_file.csv", index=False)
+            log = pd.read_csv("new_file.csv")
+            log.loc[indx, "no"] = new
+            log.to_csv("new_file.csv", index=False)
+            print("=====Details Updated=====")
+
+
 
 obj_DB=admin()
